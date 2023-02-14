@@ -1,0 +1,35 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} Edit Review  | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+{% include 'adminlite/comp/content_header.html' with Header="Edit Review" %}
+
+
+<div class="container">
+    {% include 'adminlite/comp/alert.html' %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7">
+            <div class="card card-info">
+                <div class="card-header">Edit New Category</div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                        {% for field in review_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control form-control-sm' }}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary btn-sm float-right" >Edit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

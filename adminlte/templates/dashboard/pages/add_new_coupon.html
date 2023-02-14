@@ -1,0 +1,34 @@
+{% extends "adminlte/adminlte.html" %}
+
+{% load widget_tweaks %}
+
+
+{% block title %} Add New Coupon  | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+{% include 'adminlte/comp/content_header.html' with Header="Add New Category" %}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7">
+            <div class="card card-info">
+                <div class="card-header">Add New Coupon</div>
+                <div class="card-body">
+                    <form method="POST">{% csrf_token %}
+
+                        {% for field in coupon_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control form-control-sm' }}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary btn-sm float-right" >Add Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

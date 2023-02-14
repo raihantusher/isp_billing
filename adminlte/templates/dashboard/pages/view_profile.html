@@ -1,0 +1,95 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} Profile  | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+{% include 'adminlite/comp/content_header.html' with Header="Profile Details" %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <div class="card card-widget widget-user-2">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header bg-info">
+                    <div class="widget-user-image">
+                        <img class="img-circle elevation-2" src="{{ profile.profile_picture.url }}" alt="User Avatar">
+                    </div>
+                    <!-- /.widget-user-image -->
+                    <h3 class="widget-user-username">{{ profile.user.full_name }}</h3>
+                    <h5 class="widget-user-desc">{{ profile.user.phone_number }}</h5>
+                    <div class="d-flex">
+                        <address>
+                            {{ profile.address_line_1 }}
+                            {{ profile.state }}
+                            {{ profile.city }}
+                            {{ profile.zip_1 }}
+                            {{ profile.country }}
+                        </address>
+                    </div>
+                </div>
+                <div class="card-footer p-0">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Total Spent <b class="float-right text-danger">{{ total_spent|floatformat:2 }} </b>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                Total Orders <span class="float-right text-info">{{ total_order }}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-8">
+            <div class="card card-info">
+                <div class="card-header">Order Infos</div>
+                <div class="card-body">
+                    {% for order in orders %}
+                    <div class="order-info">
+                        <h4>Order: {{ order.order_number }}</h4>
+                        <h6> Date: {{ order.created_at }} </h6>
+                        <p class="text-danger" style="font-weight:bold">Total : {{ order.order_total|floatformat:2 }} </p>
+                        <hr />
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th> Product Name</th>
+                                <th> Quantiry</th>
+                                <th> Price</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            {% for product in order.orderproduct_set.all %}
+                            <tr>
+                                <td>{{ product.product.product_name }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>{{ product.product_price }}</td>
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    {% include 'adminlite/comp/pagination.html' %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

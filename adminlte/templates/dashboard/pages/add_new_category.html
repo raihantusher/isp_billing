@@ -1,0 +1,65 @@
+{% extends "adminlte/adminlte.html" %}
+
+{% load widget_tweaks %}
+
+
+{% block title %} Add New Category  | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+{% include 'adminlte/comp/content_header.html' with Header="Add New Category" %}
+
+
+<div class="container">
+    {% include 'adminlte/comp/alert.html' %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7">
+            <div class="card card-info">
+                <div class="card-header">
+                    Add New Category
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                        {% for field in category_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control form-control-sm' }}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary btn-sm float-right">Add Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+<script>
+    function convertToSlug(Text)
+        {
+            return Text
+                //.toLowerCase()
+                .replace(/ /g,'-')
+                .replace(/[^\w-]+/g,'')
+                ;
+        }
+
+
+        $("#id_category_name").on("input", function(){
+
+         let cat = $('#id_category_name').val();
+         $('#id_slug').val(convertToSlug(cat));
+
+        });
+
+
+
+
+</script>
+{% endblock %}

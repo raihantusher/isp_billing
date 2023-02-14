@@ -1,0 +1,338 @@
+{% extends "adminlite/adminlite.html" %}
+
+
+{% block title %} Edit Product  | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block styles %}
+
+{{ block.super }}
+<style>
+    input {
+        margin: 5px;
+    }
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+
+{% include 'adminlite/comp/content_header.html' with Header="Edit Product" %}
+
+<div class="container">
+    {% include 'adminlite/comp/alert.html' %}
+    <div class="row mt-5">
+
+        <div class="col-12 col-md-12">
+            <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="card card-success card-tabs">
+                    <div class="card-header">
+                        Add Product
+                    </div>
+                    <div class="card-body">
+
+
+                        {% for field in product_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control form-control-sm' }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="card card-success">
+                            <div class="card-header">Color Variation <span class="btn btn-sm btn-primary float-right"
+                                                                           onclick="appendColor()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body colors">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="name" class="form-control form-control-sm" name="color[value]"
+                                               placeholder="Color"/>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-success">
+                            <div class="card-header">Product Variation <span class="btn btn-sm btn-primary float-right"
+                                                                             onclick="appendSize()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body sizes">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="name" class="form-control form-control-sm" name="size[value]"
+                                               placeholder="Size"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- prodduct gallery -->
+                <div class="card card-success mt-5">
+                    <div class="card-header">Product Gallery</div>
+                    <div class="card-body">
+
+                        {{ gallery.management_form }}
+                        {% for form in gallery %}
+                        {{form}}
+                        {% if form.image.value.url %}
+                        <img src="{{ form.image.value.url }}" class="img-fluid" height="75px" width="75px"/>
+                        {% endif %}
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- prodduct gallery -->
+                <button type="submit" class="btn btn-sm btn-primary float-right"> Edit prouduct</button>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+
+<script>
+    $(document).ready(function () {
+        // Handler for .ready() called.
+        var colors = $(".colors");
+        var sizes = $(".sizes");
+
+        //make colors and sizes empty
+        colors.empty()
+        sizes.empty()
+
+
+        //fetching colors and put into card
+        fetch('{% url "product_colors"  product_id %}', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(result => {
+                result.colors.map(color => {
+
+
+                    var checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + color.id + '" onchange="variationUpdate(this)" value=' + color
+                        .is_active + '> </div>';
+
+                    if (color.is_active)
+                        checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + color.id + '" onchange="variationUpdate(this)" value=' + color
+                        .is_active + ' checked></div>';
+
+                    html = '<div class="row">' +
+                        '<div class="col-5">' +
+                        '<input type="hidden" name="color[id]" value=' + color.id + '>' +
+                        '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+                        'value=' + color.color + '>' +
+                        '</div>' +
+                        checkBox
+
+                        +
+                        '<div class="col-5">' +
+                        '<span class="btn btn-sm btn-danger mt-1" data-target-id="' + color.id +
+                        '"' +
+                        ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+                        '</div>' +
+                        '</div>';
+                    colors.append(html);
+                }); // array maping finished
+            })
+        // fetching colors is finished
+
+
+
+        //fetching colors and put into card
+        fetch('{% url "product_sizes"  product_id  %}', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(result => {
+                result.sizes.map(size => {
+
+                    var checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + size.id +'" onchange="variationUpdate(this)" value=' + size
+                        .is_active + '> </div>';
+
+                    if (size.is_active)
+                        checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + size.id + '" onchange="variationUpdate(this)" value=' + size
+                        .is_active + ' checked></div>';
+
+                    html = '<div class="row">' +
+                        '<div class="col-5">' +
+                        '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+                        'value=' + size.size + '>' +
+                        '</div>' +
+                        checkBox +
+                        '<div class="col-5">'
+
+                        +
+                        '<span class="btn btn-sm btn-danger mt-1" data-target-id="'+ size.id +'" ' +
+                        ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+                        '</div>'
+
+
+                        +
+                        '</div>';
+                    sizes.append(html);
+                }); // array maping finished
+            })
+        // fetching colors is finished
+
+
+
+    })
+
+    var i = 1;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function Delete(e) {
+        let csrftoken = getCookie('csrftoken');
+
+        let id = e.getAttribute('data-target-id')
+
+        if (id) {
+            fetch('{% url "variation_delete" %}', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": csrftoken,
+                        },
+                        body: JSON.stringify({
+                            id: id
+                        })
+                    })
+                .then(response => response.json())
+                .then((data) => {
+
+                    e.parentNode.parentNode.remove()
+
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        } else {
+
+            e.parentNode.parentNode.remove()
+        }
+    }
+
+    function variationUpdate (e) {
+        let csrftoken = getCookie('csrftoken');
+
+        let id = e.getAttribute('data-target-id')
+
+        if (id) {
+            fetch('{% url "variation_update" %}', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": csrftoken,
+                        },
+                        body: JSON.stringify({
+                            id: id
+                        })
+                    })
+                .then(response => response.json())
+                .then((data) => {
+
+                    console.log(data)
+
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
+    }
+
+    function appendColor() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+            'placeholder="Color"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>' +
+            '</div>';
+        $(".colors").append(html);
+        i++;
+    }
+
+    function appendSize() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+            'placeholder="Size"/>' +
+            '</div>'
+            
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>'
+
+
+            +
+            '</div>';
+        $(".sizes").append(html);
+        i++;
+    }
+
+</script>
+
+
+{% endblock %}

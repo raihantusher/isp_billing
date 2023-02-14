@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="tt-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li>Account</li>
+		</ul>
+	</div>
+</div>
+<div id="tt-pageContent">
+	<div class="container-indent">
+		<div class="container container-fluid-custom-mobile-padding">
+			<h1 class="tt-title-subpages noborder">ACCOUNT</h1>
+			<div class="tt-shopping-layout">
+				<h2 class="tt-title-border">MY ACCOUNT</h2>
+				<div class="tt-wrapper">
+					<h3 class="tt-title">ORDER HISTORY</h3>
+					<div class="tt-table-responsive">
+						<table class="tt-table-shop-01">
+							<thead>
+								<tr>
+									<th>ORDER</th>
+									<th>DATE</th>
+									<th>PAYMENT STATUS</th>
+									<th>FULFILLMENT STATUS</th>
+									<th>TOTAL</th>
+								</tr>
+							</thead>
+							<tbody>
+							  {% for order in orders %}
+                                 <tr>
+									<td><a href="{% url 'order_detail' order.order_number %}">#{{ order.order_number }}</a></td>
+									<td>{{ order.created_at|date:'DATE_FORMAT' }}</td>
+									<td>Processing</td>
+									<td>{{ order.status }}</td>
+                                   <td><b>{{ order.order_total }}/=</b> fot {{ order.order_products.count }} item</td>
+								</tr>
+                            {% endfor %}
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="tt-wrapper">
+					<h3 class="tt-title">ACCOUNT DETAILS</h3>
+					<div class="tt-table-responsive">
+						<table class="tt-table-shop-02">
+							<tbody>
+								<tr>
+									<td>NAME:</td>
+									<td>{{ userprofile.user.full_name }} </td>
+								</tr>
+								<tr>
+									<td>E-MAIL:</td>
+									<td>{{ userprofile.user.email }} </td>
+								</tr>
+								<tr>
+									<td>ADDRESS:</td>
+									<td>{{ userprofile.address_line_1 }}</td>
+								</tr>
+								<tr>
+									<td>ZIP:</td>
+									<td>{{ userprofile.zip }}</td>
+								</tr>
+								<tr>
+									<td>PHONE:</td>
+									<td>{{ userprofile.user.phone_number }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="d-flex mt-5">
+					<a href="{% url 'edit_profile' %}" class="btn btn-border mr-2">Edit Profile</a>
+					<a href="{% url 'change_password' %}" class="btn btn-border">Change Password</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

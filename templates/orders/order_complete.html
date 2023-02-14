@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- CONTENT -->
+    <section class="py-12">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 text-center">
+            <!-- Icon -->
+            <div class="mb-7 font-size-h1">❤️</div>
+            <!-- Heading -->
+            <h2 class="mb-5">Your Order is Completed!</h2>
+            <!-- Text -->
+            <p class="mb-7 text-gray-500">
+              Your order <span class="text-body text-decoration-underline">{{ order_number }}</span> has been completed. Your order details
+              are shown for your personal account.
+            </p>
+            <!-- Button -->
+            <a class="btn btn-dark" href="{% url 'order_detail' order_number %}">
+              View My Orders
+            </a>
+
+          </div>
+            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+
+            <form action="{% url 'payment_processing' %}" method="POST"> {% csrf_token %}
+                <input type="hidden" name="order_number" value="{{ order_number }}" />
+                <div class="form-group">
+                    <select class="custom-select" name="payment_method" aria-label="Default select example">
+                        <option value="bkash">Bkash</option>
+                        <option value="nagad">Nagad</option>
+                        <option value="rocket">Rocket</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount:</label>
+                    <input type="number" class="form-control-xs" name="acc_amount" placeholder="" required>
+                    <small class="form-text text-muted"> Amount that you want to pay. </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Account Number:</label>
+                    <input type="text" class="form-control-xs" name="acc_number" placeholder="01700000000" required>
+                    <small class="form-text text-muted">11 digit phone number </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Transaction ID:</label>
+                    <input type="text" class="form-control-xs" name="acc_trx" placeholder="TRX7895252" required>
+                    <small class="form-text text-muted"> Your Transaction Number</small>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-sm btn-dark"> Submit</button>
+                </div>
+
+            </form>
+        </div><!-- /.col -->
+
+        </div><!-- /.row -->
+      </div><!-- /.container -->
+    </section>
+
+
+
+{% endblock %}

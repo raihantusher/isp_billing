@@ -1,0 +1,277 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} Add Product | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+    input {
+        margin: 5px;
+    }
+
+
+
+
+
+
+
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+
+{% include 'adminlte/comp/content_header.html' with Header="Edit Product" %}
+
+<div class="container">
+    {% include 'adminlte/comp/alert.html' %}
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="row mt-5">
+
+            <div class="col-12 col-md-7">
+                <div class="card card-success card-tabs ">
+                    <div class="card-header">
+                        Add Product
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+
+                            <div class="form-group">
+                                <div class="col-12 col-md-6">
+                                    <label>Product Name:</label>
+                                    <input type="text" name="{{ product_form.product_name.html_name }}"
+                                           class="form-control form-control-sm">
+                                    {% include 'adminlte/comp/error.html' with field=product_form.product_name %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-12 col-md-6">
+                                    <label>Slug:</label>
+                                    <input type="text" name="{{ product_form.slug.html_name }}"
+                                           class="form-control form-control-sm">
+                                    {% include 'adminlte/comp/error.html' with field=product_form.slug %}
+                                </div>
+                            </div>
+
+                            <div class="form-group-row">
+                                <div class="col-12 col-md-12">
+                                    <label>Description:</label>
+                                    <textarea class="form-control form-control-sm" id="detail" row="5"
+                                              name="{{ product_form.description.html_name }}"></textarea>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.description %}
+                                </div>
+                            </div>
+
+                            <div class="form-group-row">
+                                <div class="col-12 col-md-12">
+                                    <label>Overview:</label>
+                                    <textarea class="form-control form-control-sm" id="overview" row="5"
+                                              name="{{ product_form.overview.html_name }}"></textarea>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.overview %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-1">
+                                <div class="col-4">
+                                    <label>Price</label>
+                                    <input type="number" name="{{ product_form.price.html_name }}"
+                                           class="form-control"/>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.price %}
+                                </div>
+                                <div class="col-4">
+                                    <label>Stock</label>
+                                    <input type="number" name="{{ product_form.stock.html_name }}"
+                                           class="form-control"/>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.stock %}
+                                </div>
+
+                                <div class="col-4">
+                                    <label>Category:</label>
+                                    {{ product_form.category }}
+                                    {% include 'adminlte/comp/error.html' with field=product_form.category %}
+                                </div>
+                            </div>
+
+
+                            <div class="form-check">
+                                <input type="checkbox" name="{{ product_form.is_available.html_name }}"
+                                       class="form-check-input"
+                                       id="available">
+                                <label class="form-check-label" for="available">Is Available</label>
+                            </div>
+
+                            <div class="custom-file">
+                                <label>Product Image: </label>
+                                <input type="file" class="form-control"  name="{{ product_form.images.html_name }}" >
+                                {% include 'adminlte/comp/error.html' with field=product_form.images %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- prodduct gallery -->
+                <div class="card card-success mt-5">
+                    <div class="card-header">Product Gallery</div>
+                    <div class="card-body">
+
+                        {{ gallery.management_form }}
+                        {% for form in gallery %}
+                        {{ form }}
+                        <hr>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                         <!-- prodduct gallery -->
+                        <button type="submit" class="btn btn-sm btn-primary float-right"> Add prouduct</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <div class="">
+                    <div class="card card-success">
+                        <div class="card-header">Color Variation <span class="btn btn-sm btn-primary float-right"
+                                                                       onclick="appendColor()"><i
+                                class="fas fa-plus-circle"></i> Add</span>
+                        </div>
+                        <div class="card-body colors">
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="name" class="form-control form-control-sm" name="color[value]"
+                                           placeholder="Color"/>
+                                </div>
+                                <div class="col-2"><input type="checkbox" value="on" checked
+                                                          onclick="return false;"></div>
+                                <div class="col-5">
+                                <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i
+                                        class="fas fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="card card-success">
+                        <div class="card-header">Size Variation <span class="btn btn-sm btn-primary float-right"
+                                                                         onclick="appendSize()"><i
+                                class="fas fa-plus-circle"></i> Add</span>
+                        </div>
+                        <div class="card-body sizes">
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="name" class="form-control form-control-sm" name="size[value]"
+                                           placeholder="Size"/>
+                                </div>
+                                <div class="col-2"><input type="checkbox" value="on" checked
+                                                          onclick="return false;"></div>
+                                <div class="col-5">
+                                <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i
+                                        class="fas fa-trash"></i></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+
+<script>
+    // Handler for .ready() called.
+    var colors = $(".colors");
+    var sizes = $(".sizes");
+
+    //make colors and sizes empty
+    //colors.empty()
+    //sizes.empty()
+
+
+    
+    function Delete(e) {
+            e.parentNode.parentNode.remove()
+    }
+
+
+
+
+
+    function appendColor() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+            'placeholder="Color"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1" data-target-color="0"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> </span>' +
+            '</div>' +
+            '</div>';
+        $(".colors").append(html);
+
+    }
+
+
+
+    function appendSize() {
+
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+            'placeholder="Size"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i></span>' +
+            '</div>'
+
+
+            +
+            '</div>';
+        $(".sizes").append(html);
+    }
+
+
+
+
+
+
+
+
+
+</script>
+
+
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+                        CKEDITOR.replace( 'detail' );
+                        CKEDITOR.replace( 'overview' );
+</script>
+{% endblock %}

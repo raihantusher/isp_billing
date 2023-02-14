@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<!-- CONTENT -->
+<section class="pt-7 pb-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+
+                <!-- Heading -->
+                <h3 class="mb-10">Edit Profile</h3>
+                {# include 'includes/alerts.html' #}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-3">
+
+                <!-- Nav -->
+                {# include 'includes/dashboard_sidebar.html' #}
+
+
+            </div>
+
+            <!-- Main -->
+            <div class="col-12 col-md-9 col-lg-8 offset-lg-1">
+
+                <!-- Form -->
+                <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>
+                                    First Name *
+                                </label>
+                                {{user_form.first_name}}
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-md-6">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>
+                                    Last Name *
+                                </label>
+                                {{user_form.last_name}}
+                            </div>
+
+                        </div>
+                        <div class="col-12">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>
+                                    Phone Number *
+                                </label>
+                                {{user_form.phone_number}}
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>
+                                    Profile Picture
+                                </label>
+                                {{profile_form.profile_picture}}
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label>
+                                    Address:
+                                </label>
+                                {{profile_form.address_line_1}}
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>
+                                    City:
+                                </label>
+                                {{profile_form.city}}
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>
+                                    State
+                                </label>
+                                {{profile_form.state}}
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>
+                                    Country
+                                </label>
+                                {{profile_form.country}}
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <!-- Button -->
+                            <button class="btn btn-dark" type="submit">Save Changes</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div><!-- / Main Container -->
+        </div>
+    </div>
+</section>
+
+{% endblock %}

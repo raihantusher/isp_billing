@@ -1,0 +1,84 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} All Payments  | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+{% include 'adminlte/comp/content_header.html' with Header="All Payments" %}
+
+
+<div class="container">
+    {% include 'adminlte/comp/alert.html' %}
+    <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">All Payment List </h3>
+
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="search" class="form-control float-right"
+                                       placeholder="Search">
+
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Payment Method</th>
+                                <th>Amount Paid</th>
+                                <th>Status</th>
+                                <th>User</th>
+                                <th>Payment Date</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for payment in payment_list %}
+                            <tr>
+                                <td>{{ payment.payment_id }}</td>
+                                <td>{{ payment.payment_method }}</td>
+                                <td>{{ payment.amount_paid }}</td>
+                                <td><span class="badge {% if payment.status.lower == 'new' %}badge-success{% endif %}">{{ payment.status }}</span></td>
+                                <td style="line-height:0.4">
+                                    <p style="font-size:11px">{{ payment.user.full_name }}</p>
+                                    <p style="font-size:11px">{{ payment.user.email}}</p>
+                                    <p style="font-size:11px">{{ payment.user.phone_number }}</p>
+                                </td>
+                                <td>{{ payment.created_at }}</td>
+                                <td>
+                                    <form action="{% url 'delete_payment' payment.id %}" method="POST">{% csrf_token %}
+                                        <a href="{% url 'edit_payment' payment.id %}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        {% include 'adminlte/comp/pagination.html' %}
+                    </div>
+                </div>
+                <!-- /.card -->
+        </div>
+    </div>
+</div>
+{% endblock %}

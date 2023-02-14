@@ -1,0 +1,85 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} All Products  | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+
+
+{% include 'adminlte/comp/content_header.html' with Header="All Products" %}
+
+<div class="container">
+    {% include 'adminlte/comp/alert.html' %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Profile List</h3>
+
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="search" class="form-control float-right"
+                                       placeholder="Search">
+
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone No.</th>
+                                <th>City</th>
+
+                                <th>State</th>
+                                <th>Zip/PostCode</th>
+                                <th>Country</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for profile in profile_list %}
+                            <tr>
+                                <td>{{ profile.id }}</td>
+                                <td><img src="{{ profile.profile_picture.url}}" class="img-fluid" height="60px" width="60px"/></td>
+                                <td>{{ profile.user.full_name }}</td>
+                                <td>{{ profile.user.email }}</td>
+                                <td>{{ profile.user.phone_number }}</td>
+                                <td>{{ profile.city }}</td>
+                                <td>{{ profile.zip_1 }}</td>
+                                <td>{{ profile.state }}</td>
+                                <td>{{ profile.country }}</td>
+
+                                <td>
+                                    <a href="{% url 'view_profile' profile.id %}" class="btn btn-sm btn-primary"><i class="far fa-eye"></i></a>
+                                </td>
+                            </tr>
+                            {%  endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        {% include 'adminlte/comp/pagination.html' %}
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

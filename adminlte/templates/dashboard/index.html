@@ -1,0 +1,18 @@
+{% extends 'adminlite/adminlite.html' %}
+
+{% load static %}
+{% block styles %}
+  {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+  hello {{ request.user.username }} {{ request.path }}
+
+
+{% endblock %}
+
+
+{% block scripts %}
+  {{ block.super }}
+{% endblock %}

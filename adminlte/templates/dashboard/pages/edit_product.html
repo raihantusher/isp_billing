@@ -1,0 +1,422 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} Add Product | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+    input {
+        margin: 5px;
+    }
+
+
+
+
+
+
+
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+
+{% include 'adminlte/comp/content_header.html' with Header="Edit Product" %}
+
+<div class="container">
+    {% include 'adminlte/comp/alert.html' %}
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="row mt-5">
+
+            <div class="col-12 col-md-7">
+                <div class="card card-success card-tabs ">
+                    <div class="card-header">
+                        Add Product
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+
+                            <div class="form-group">
+                                <div class="col-12 col-md-6">
+                                    <label>Product Name:</label>
+                                    <input type="text" name="{{ product_form.product_name.html_name }}"
+                                           value="{{ product_form.product_name.value }}"
+                                           class="form-control form-control-sm">
+                                    {% include 'adminlte/comp/error.html' with field=product_form.product_name %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-12 col-md-3">
+                                    <label>Slug:</label>
+                                    <input type="text" name="{{ product_form.slug.html_name }}"
+                                           value="{{ product_form.slug.value }}"
+                                           class="form-control form-control-sm">
+                                    {% include 'adminlte/comp/error.html' with field=product_form.slug %}
+                                </div>
+                            </div>
+
+                            <div class="form-group-row">
+                                <div class="col-12 col-md-12">
+                                    <label>Description:</label>
+                                    <textarea class="form-control form-control-sm" id="detail" row="5"
+                                              name="{{ product_form.description.html_name }}">{{ product_form.description.value }}</textarea>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.description %}
+                                </div>
+                            </div>
+
+                            <div class="form-group-row">
+                                <div class="col-12 col-md-12">
+                                    <label>Overview:</label>
+                                    <textarea class="form-control form-control-sm" id="overview" row="5"
+                                              name="{{ product_form.overview.html_name }}">{{ product_form.overview.value}}</textarea>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.overview %}
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-1">
+                                <div class="col-4">
+                                    <label>Price</label>
+                                    <input type="number" name="{{ product_form.price.html_name }}"
+                                           value="{{ product_form.price.value }}"
+                                           class="form-control"/>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.price %}
+                                </div>
+                                <div class="col-4">
+                                    <label>Stock</label>
+                                    <input type="number" name="{{ product_form.stock.html_name }}"
+                                           value="{{ product_form.stock.value }}"
+                                           class="form-control"/>
+                                    {% include 'adminlte/comp/error.html' with field=product_form.stock %}
+                                </div>
+
+                                <div class="col-4">
+                                    <label>Category:</label>
+                                    {{ product_form.category }}
+                                    {% include 'adminlte/comp/error.html' with field=product_form.category %}
+                                </div>
+                            </div>
+
+
+                            <div class="form-check">
+                                <input type="checkbox" name="{{ product_form.is_available.html_name }}"
+                                       class="form-check-input"
+                                       id="available"
+                                       {% if product_form.is_available.value %} checked {% endif %}>
+                                <label class="form-check-label" for="available">Is Available</label>
+                            </div>
+
+                            <div class="custom-file">
+                                <label>Product Image: </label>
+                                <input type="file" class="form-control"  name="{{ product_form.images.html_name }}" >
+                                {% include 'adminlte/comp/error.html' with field=product_form.images %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- prodduct gallery -->
+                <div class="card card-success mt-5">
+                    <div class="card-header">Product Gallery</div>
+                    <div class="card-body">
+
+                        {{ gallery.management_form }}
+                        {% for form in gallery %}
+                        {{ form }}
+
+                        {% if form.image.value.url %}
+                            <img src="{{ form.image.value.url }}" class="img-fluid" height="75px" width="75px"/>
+                        {% endif %}
+
+                        <hr>
+                        {% endfor %}
+                    </div>
+
+                    <div class="card-footer">
+                          <button type="submit" class="btn btn-sm btn-primary float-right">Updated Prouduct</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-3">
+                <div class="">
+                        <div class="card card-success">
+                            <div class="card-header">Color Variation <span class="btn btn-sm btn-primary float-right"
+                                                                           onclick="appendColor()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body colors">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="name" class="form-control form-control-sm" name="color[value]"
+                                               placeholder="Color"/>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="card card-success">
+                            <div class="card-header">Size Variation <span class="btn btn-sm btn-primary float-right"
+                                                                             onclick="appendSize()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body sizes">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="name" class="form-control form-control-sm" name="size[value]"
+                                               placeholder="Size"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+</div>
+</form>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+{{ block.super }}
+
+
+<script>
+    $(document).ready(function () {
+        // Handler for .ready() called.
+        var colors = $(".colors");
+        var sizes = $(".sizes");
+
+        //make colors and sizes empty
+        colors.empty()
+        sizes.empty()
+
+
+        //fetching colors and put into card
+        fetch('{% url "product_colors"  product_id %}', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(result => {
+                result.colors.map(color => {
+
+
+                    var checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + color.id + '" onchange="variationUpdate(this)" value=' + color
+                        .is_active + '> </div>';
+
+                    if (color.is_active)
+                        checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + color.id + '" onchange="variationUpdate(this)" value=' + color
+                        .is_active + ' checked></div>';
+
+                    html = '<div class="row">' +
+                        '<div class="col-5">' +
+                        '<input type="hidden" name="color[id]" value=' + color.id + '>' +
+                        '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+                        'value=' + color.color + '>' +
+                        '</div>' +
+                        checkBox
+
+                        +
+                        '<div class="col-5">' +
+                        '<span class="btn btn-sm btn-danger mt-1" data-target-id="' + color.id +
+                        '"' +
+                        ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+                        '</div>' +
+                        '</div>';
+                    colors.append(html);
+                }); // array maping finished
+            })
+        // fetching colors is finished
+
+
+
+        //fetching colors and put into card
+        fetch('{% url "product_sizes"  product_id  %}', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(result => {
+                result.sizes.map(size => {
+
+                    var checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + size.id +'" onchange="variationUpdate(this)" value=' + size
+                        .is_active + '> </div>';
+
+                    if (size.is_active)
+                        checkBox = '<div class="col-2"> <input type="checkbox" data-target-id="' + size.id + '" onchange="variationUpdate(this)" value=' + size
+                        .is_active + ' checked></div>';
+
+                    html = '<div class="row">' +
+                        '<div class="col-5">' +
+                        '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+                        'value=' + size.size + '>' +
+                        '</div>' +
+                        checkBox +
+                        '<div class="col-5">'
+
+                        +
+                        '<span class="btn btn-sm btn-danger mt-1" data-target-id="'+ size.id +'" ' +
+                        ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+                        '</div>'
+
+
+                        +
+                        '</div>';
+                    sizes.append(html);
+                }); // array maping finished
+            })
+        // fetching colors is finished
+
+
+
+    })
+
+    var i = 1;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function Delete(e) {
+        let csrftoken = getCookie('csrftoken');
+
+        let id = e.getAttribute('data-target-id')
+
+        if (id) {
+            fetch('{% url "variation_delete" %}', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": csrftoken,
+                        },
+                        body: JSON.stringify({
+                            id: id
+                        })
+                    })
+                .then(response => response.json())
+                .then((data) => {
+
+                    e.parentNode.parentNode.remove()
+
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        } else {
+
+            e.parentNode.parentNode.remove()
+        }
+    }
+
+    function variationUpdate (e) {
+        let csrftoken = getCookie('csrftoken');
+
+        let id = e.getAttribute('data-target-id')
+
+        if (id) {
+            fetch('{% url "variation_update" %}', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": csrftoken,
+                        },
+                        body: JSON.stringify({
+                            id: id
+                        })
+                    })
+                .then(response => response.json())
+                .then((data) => {
+
+                    console.log(data)
+
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
+    }
+
+    function appendColor() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+            'placeholder="Color"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>' +
+            '</div>';
+        $(".colors").append(html);
+        i++;
+    }
+
+    function appendSize() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+            'placeholder="Size"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>'
+
+
+            +
+            '</div>';
+        $(".sizes").append(html);
+        i++;
+    }
+
+</script>
+
+
+
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+                        CKEDITOR.replace( 'detail' );
+                        CKEDITOR.replace( 'overview' );
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'dashboard/bootstrap5.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+            <h2>Sign up</h2>
+            <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit">Sign up</button>
+            </form>
+        </div><!-- /.card-body -->
+      </div><!-- /.card -->
+    </div><!-- /.col-12 -->
+  </div><!-- /.row -->
+</div><!-- /.container -->
+<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends "adminlite/adminlite.html" %}
+
+
+{% block title %} Edit Product | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block styles %}
+{{ block.super }}
+<style>
+    input {
+        margin: 5px;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+
+{% include 'adminlite/comp/content_header.html' with Header="Edit Product" %}
+
+<div class="container">
+    {% include 'adminlite/comp/alert.html' %}
+    <div class="row mt-5">
+
+        <div class="col-12 col-md-12">
+            <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="card card-success card-tabs">
+                    <div class="card-header">
+                        Add Product
+                    </div>
+                    <div class="card-body">
+
+
+                        {% for field in product_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control form-control-sm' }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="card card-success">
+                            <div class="card-header">Color Variation <span class="btn btn-sm btn-primary float-right"
+                                    onclick="appendColor()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body colors">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="name" class="form-control form-control-sm" name="color[value]"
+                                            placeholder="Color" />
+                                    </div>
+                                    <div class="col-2"> <input type="checkbox" value="on" checked
+                                            onclick="return false;"> </div>
+                                    <div class="col-5">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-success">
+                            <div class="card-header">Product Variation <span class="btn btn-sm btn-primary float-right"
+                                    onclick="appendSize()"><i class="fas fa-plus-circle"></i> Add</span>
+                            </div>
+                            <div class="card-body sizes">
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="name" class="form-control form-control-sm" name="size[value]"
+                                            placeholder="Size" />
+                                    </div>
+                                    <div class="col-2"> <input type="checkbox" value="on" checked
+                                            onclick="return false;"> </div>
+                                    <div class="col-5">
+                                        <span class="btn btn-sm btn-danger mt-1" onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- prodduct gallery -->
+                <div class="card card-success mt-5">
+                    <div class="card-header">Product Gallery</div>
+                    <div class="card-body">
+
+                        {{ gallery.management_form }}
+                        {% for form in gallery %}
+                        {{ form }}
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- prodduct gallery -->
+                <button type="submit" class="btn btn-sm btn-primary float-right"> Add prouduct</button>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+
+<script>
+    // Handler for .ready() called.
+    var colors = $(".colors");
+    var sizes = $(".sizes");
+
+    //make colors and sizes empty
+    //colors.empty()
+    //sizes.empty()
+
+
+    
+    function Delete(e) {
+            e.parentNode.parentNode.remove()
+    }
+
+
+
+
+
+    function appendColor() {
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="color[value]"' +
+            'placeholder="Color"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1" data-target-color="0"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>' +
+            '</div>';
+        $(".colors").append(html);
+
+    }
+
+
+
+    function appendSize() {
+
+
+        html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input type="name" class="form-control form-control-sm" name="size[value]"' +
+            'placeholder="Size"/>' +
+            '</div>'
+
+            +
+            '<div class="col-2"> <input type="checkbox" value="on" checked onclick="return false;" > </div>'
+
+            +
+            '<div class="col-5">' +
+            '<span class="btn btn-sm btn-danger mt-1"' +
+            ' onclick="Delete(this)"><i class="fas fa-trash"></i> Delete</span>' +
+            '</div>'
+
+
+            +
+            '</div>';
+        $(".sizes").append(html);
+    }
+</script>
+
+
+{% endblock %}

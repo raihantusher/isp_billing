@@ -1,0 +1,37 @@
+{% extends "adminlte/adminlte.html" %}
+
+
+{% block title %} Update Payment  | {{ block.super }}{% endblock %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+{% include 'adminlite/comp/content_header.html' with Header="Edit Payment" %}
+
+
+
+<div class="container">
+    {% include 'adminlite/comp/alert.html' %}
+    <div class="row justify-content-center">
+        <div class=" col-12 col-md-7">
+            <div class="card card-info">
+                <div class="card-header">Edit Payment</div>
+                <div class="card-body">
+                    <form method="post">{% csrf_token %}
+
+                        {% for field in payment_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field|add_class:'form-control' }}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-sm btn-primary float-right">Update Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
