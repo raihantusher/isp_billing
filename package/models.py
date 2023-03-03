@@ -4,4 +4,4 @@ from django.db import models
 
 class Package(models.Model):
     package_name = models.CharField(max_length=200)
-    price = models.DecimalField(default=0)
+    price = models.IntegerField(default=0)
