@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'adminlite',
     'helpdesk',
+    'package',
+    'bill',
 ]
 
 MIDDLEWARE = [
