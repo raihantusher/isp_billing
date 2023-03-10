@@ -1,0 +1,71 @@
+{% extends "adminlte/adminlte.html" %}}
+
+
+{% block content %}
+
+
+{% include 'adminlte/comp/content_header.html' with Header="All Article List" %}
+
+<div class="container">
+    {% include 'adminlite/comp/alert.html' %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Responsive Hover Table</h3>
+
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control float-right"
+                                       placeholder="Search">
+
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category Name</th>
+                                <th>Slug</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for article in article_list %}
+                            <tr>
+                                <td>{{ article.id }}</td>
+                                <td>{{ article.title }}</td>
+
+                                <td>
+<!--                                    <form action="{% url 'delete_article' article.id %}" method="POST">{% csrf_token %}-->
+<!--                                        <a href="{% url 'edit_article' article.id %}" class="btn btn-sm btn-primary">Edit</a>-->
+<!--                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>-->
+<!--                                    </form>-->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        {% include 'adminlite/comp/pagination.html' %}
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,242 @@
+{% load static %}
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="" class="brand-link">
+        {% if store.store_image %}
+                <img src="{# store.store_image.url #}" alt="AdminLTE Logo"
+             class="brand-image img-circle elevation-3" style="opacity: .8">
+            {% else %}
+                <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+             class="brand-image img-circle elevation-3" style="opacity: .8">
+            {% endif %}
+
+        <span class="brand-text font-weight-light">
+            {% if store.store_name %}
+                {{ store.store_name }}
+            {% else %}
+                Dream Store
+            {% endif %}
+        </span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                {% if request.user.userprofile.profile_picture %}
+                    <img src="{{ request.user.userprofile.profile_picture.url }}" class="img-circle elevation-2" alt="User Image">
+                {% else %}
+                    <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+                {% endif %}
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ request.user.full_name }} </a>
+            </div>
+        </div>
+
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="{% url 'seller_dashboard' %}"
+                       class="nav-link {% if '/seller/' == request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Home
+                        </p>
+                    </a>
+                    <!--            <ul class="nav nav-treeview">-->
+                    <!--              <li class="nav-item">-->
+                    <!--                <a href="./index.html" class="nav-link active">-->
+                    <!--                  <i class="far fa-circle nav-icon"></i>-->
+                    <!--                  <p>Dashboard v1</p>-->
+                    <!--                </a>-->
+                    <!--              </li>-->
+                    <!--              <li class="nav-item">-->
+                    <!--                <a href="./index2.html" class="nav-link">-->
+                    <!--                  <i class="far fa-circle nav-icon"></i>-->
+                    <!--                  <p>Dashboard v2</p>-->
+                    <!--                </a>-->
+                    <!--              </li>-->
+                    <!--              <li class="nav-item">-->
+                    <!--                <a href="./index3.html" class="nav-link">-->
+                    <!--                  <i class="far fa-circle nav-icon"></i>-->
+                    <!--                  <p>Dashboard v3</p>-->
+                    <!--                </a>-->
+                    <!--              </li>-->
+                    <!--            </ul>-->
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'order_list' %}"
+                       class="nav-link {% if 'order/list' in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Orders
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'payment_list' %}"
+                       class="nav-link {% if 'payment' in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Payments
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item {% if 'category' in request.path %}menu-open{% endif %}">
+                    <a href="{% url 'category_add' %}" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Categories
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'category_add' %}"
+                               class="nav-link {% if 'category/add/' in request.path %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add New Cateogory</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'category_list' %}"
+                               class="nav-link {% if 'category/list/' in request.path %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>All Categories</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item {% if 'product' in request.path %}menu-open{% endif %}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Products
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'product_add' %}"
+                               class="nav-link {% if 'product/add/' in request.path %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add New Product</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'product_list' %}"
+                               class="nav-link {% if 'product/list' in request.path %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>All Products</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'rating_list' %}" class="nav-link {% if 'rating' in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Reviews
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'coupon_list' %}" class="nav-link {% if 'coupon' in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Coupons
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'profile_list' %}" class="nav-link {% if '/seller/profile' in request.path %}active{% endif %}">
+                        <i class="fas fa-users"></i>
+                        <p>
+                            User Profiles
+                        </p>
+                    </a>
+                </li>
+
+<!--                 <li class="nav-item {% if 'product' in request.path %}menu-open{% endif %}">-->
+<!--                    <a href="#" class="nav-link">-->
+<!--                        <i class="nav-icon fas fa-chart-pie"></i>-->
+<!--                        <p>-->
+<!--                            Articles-->
+<!--                            <i class="right fas fa-angle-left"></i>-->
+<!--                        </p>-->
+<!--                    </a>-->
+<!--                    <ul class="nav nav-treeview">-->
+<!--                        <li class="nav-item">-->
+<!--                            <a href="{% url 'article_add' %}"-->
+<!--                               class="nav-link {% if 'product/add/' in request.path %}active{% endif %}">-->
+<!--                                <i class="far fa-circle nav-icon"></i>-->
+<!--                                <p>Add New Article</p>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a href="{% url 'article_list' %}"-->
+<!--                               class="nav-link {% if 'product/list' in request.path %}active{% endif %}">-->
+<!--                                <i class="far fa-circle nav-icon"></i>-->
+<!--                                <p>All Articles</p>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+
+<!--                <li class="nav-item">-->
+<!--                    <a href="#" class="nav-link">-->
+<!--                        <i class="nav-icon fas fa-chart-pie"></i>-->
+<!--                        <p>-->
+<!--                            All Users-->
+<!--                        </p>-->
+<!--                    </a>-->
+<!--                </li>-->
+
+
+                <li class="nav-header">Setting Area</li>
+
+                <li class="nav-item">
+                    <a href="{% url 'profile_settings'  %}" class="nav-link {% if '/seller/settings/profile' == request.path %}active{% endif %}">
+                        <i class="fas fa-cog"></i>
+                        <p>
+                           Profile Settings
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'password_settings' %}" class="nav-link {% if 'settings/password' in request.path %}active{% endif %}">
+                        <i class="fas fa-cog"></i>
+                        <p>
+                           Password Settings
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'store_settings' 1 %}" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <p>
+                           Store Settings
+                        </p>
+                    </a>
+                </li>
+
+
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
